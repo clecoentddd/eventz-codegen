@@ -1,6 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { eventStore, mockRabbitMQ } from './eventz-runtime';
 
+import { listOfCappuccinoToPrepareProjection } from './slices/state-view/SliceListOfCappuccinoToPrepare/index.js';
+import { espressoToPrepareProjection } from './slices/state-view/SliceEspressoToPrepare/index.js';
+import { espressoReadyProjection } from './slices/state-view/SliceOrderReady/index.js';
+import { orderReadyProjection } from './slices/state-view/SliceOrderReady_2/index.js';
+import { attemptOrderEspresso } from './slices/state-change/SliceEspressoOrdered/index.js';
+import { attemptOrderCappuccino } from './slices/state-change/SliceOrderCappuccino/index.js';
+
+import { processMarkFrostMilkPreparedSlice, attemptMarkFrostMilkPrepared } from './slices/state-change/SliceFrostPrepareMilk/index.js';
+import { processMarkEspressoPreparedSlice, attemptMarkEspressoPrepared } from './slices/state-change/SliceMarkEspressoPrepared/index.js';
+import { processConfirmOrderReadySlice, attemptConfirmOrderReady } from './slices/state-change/SliceConfirmOrderReady/index.js';
+
 // Generated from EventZ configuration: eventZ Cappuccino
 // Total slices: 9
 
@@ -198,219 +209,6 @@ const judgeConfirmOrderReady = (intent, history) => {
   //     }
   //   }
   // };
-};
-
-// ============================================================================
-// STATE VIEW SLICES - Projections (Read Models)
-// ============================================================================
-
-// STATE VIEW: List of cappuccino to prepare (TODO)
-const listOfCappuccinoToPrepareProjection = (events) => {
-  return events.reduce((cappuccinoOrdereds, event) => {
-    switch (event.type) {
-      case 'CappuccinoOrdered':
-        cappuccinoOrdereds[event.data.orderId] = {
-          orderId: event.data.orderId,
-          createdAt: event.timestamp
-        };
-        break;
-      case 'FrostMilkPrepared':
-        delete cappuccinoOrdereds[event.data.orderId];
-        break;
-      default:
-        break;
-    }
-    return cappuccinoOrdereds;
-  }, {});
-};
-
-// STATE VIEW: Espresso to prepare (TODO)
-const espressoToPrepareProjection = (events) => {
-  return events.reduce((frostMilkPrepareds, event) => {
-    switch (event.type) {
-      case 'FrostMilkPrepared':
-        frostMilkPrepareds[event.data.orderId] = {
-          orderId: event.data.orderId,
-          createdAt: event.timestamp
-        };
-        break;
-      case 'EspressoOrdered':
-        frostMilkPrepareds[event.data.orderId] = {
-          orderId: event.data.orderId,
-          createdAt: event.timestamp
-        };
-        break;
-      case 'EspressoPrepared':
-        delete frostMilkPrepareds[event.data.orderId];
-        break;
-      default:
-        break;
-    }
-    return frostMilkPrepareds;
-  }, {});
-};
-
-// STATE VIEW: Espresso ready (TODO)
-const espressoReadyProjection = (events) => {
-  return events.reduce((espressoPrepareds, event) => {
-    switch (event.type) {
-      case 'EspressoPrepared':
-        espressoPrepareds[event.data.orderId] = {
-          orderId: event.data.orderId,
-          createdAt: event.timestamp
-        };
-        break;
-      case 'DrinkReady':
-        delete espressoPrepareds[event.data.orderId];
-        break;
-      default:
-        break;
-    }
-    return espressoPrepareds;
-  }, {});
-};
-
-// STATE VIEW: Order ready (TODO)
-const orderReadyProjection = (events) => {
-  return events.reduce((drinkReadys, event) => {
-    switch (event.type) {
-      case 'DrinkReady':
-        drinkReadys[event.data.orderId] = {
-          orderId: event.data.orderId,
-          createdAt: event.timestamp
-        };
-        break;
-
-      default:
-        break;
-    }
-    return drinkReadys;
-  }, {});
-};
-
-// ============================================================================
-// STATE CHANGE SLICES - Process Intents
-// ============================================================================
-
-// STATE CHANGE: Process Order Espresso attempts handled via RabbitMQ queue (OrderEspressoAttempted).
-// STATE CHANGE: Process Order Cappuccino attempts handled via RabbitMQ queue (OrderCappuccinoAttempted).
-// STATE CHANGE: Automation slice for processor
-const processMarkFrostMilkPreparedSlice = (events) => {
-  const pendingEntities = listOfCappuccinoToPrepareProjection(events);
-  const entityIds = Object.keys(pendingEntities);
-  
-  const processedIds = new Set(
-    events
-      .filter(e => e.type === 'FrostMilkPrepared')
-      .map(e => e.data.orderId)
-  );
-  
-  const attemptedIds = new Set(
-    events
-      .filter(e => e.type === 'MarkFrostMilkPreparedAttempted')
-      .map(e => e.data.orderId)
-  );
-  
-  return entityIds.filter(id => !processedIds.has(id) && !attemptedIds.has(id));
-};
-
-// STATE CHANGE: Automation slice for espresso maker processor
-const processMarkEspressoPreparedSlice = (events) => {
-  const pendingEntities = espressoToPrepareProjection(events);
-  const entityIds = Object.keys(pendingEntities);
-  
-  const processedIds = new Set(
-    events
-      .filter(e => e.type === 'EspressoPrepared')
-      .map(e => e.data.orderId)
-  );
-  
-  const attemptedIds = new Set(
-    events
-      .filter(e => e.type === 'MarkEspressoPreparedAttempted')
-      .map(e => e.data.orderId)
-  );
-  
-  return entityIds.filter(id => !processedIds.has(id) && !attemptedIds.has(id));
-};
-
-// STATE CHANGE: Automation slice for processor confirmation
-const processConfirmOrderReadySlice = (events) => {
-  const pendingEntities = espressoReadyProjection(events);
-  const entityIds = Object.keys(pendingEntities);
-  
-  const processedIds = new Set(
-    events
-      .filter(e => e.type === 'DrinkReady')
-      .map(e => e.data.orderId)
-  );
-  
-  const attemptedIds = new Set(
-    events
-      .filter(e => e.type === 'ConfirmOrderReadyAttempted')
-      .map(e => e.data.orderId)
-  );
-  
-  return entityIds.filter(id => !processedIds.has(id) && !attemptedIds.has(id));
-};
-
-// ============================================================================
-// COMMAND HANDLERS - Create Intent Events
-// ============================================================================
-
-const attemptOrderEspresso = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-  return {
-    type: 'OrderEspressoAttempted',
-    data: {
-      orderId: orderId,
-    }
-  };
-};
-
-const attemptOrderCappuccino = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-  return {
-    type: 'OrderCappuccinoAttempted',
-    data: {
-      orderId: orderId,
-    }
-  };
-};
-
-const attemptMarkFrostMilkPrepared = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-  return {
-    type: 'MarkFrostMilkPreparedAttempted',
-    data: {
-      orderId: orderId,
-    }
-  };
-};
-
-const attemptMarkEspressoPrepared = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-  return {
-    type: 'MarkEspressoPreparedAttempted',
-    data: {
-      orderId: orderId,
-    }
-  };
-};
-
-const attemptConfirmOrderReady = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-  return {
-    type: 'ConfirmOrderReadyAttempted',
-    data: {
-      orderId: orderId,
-    }
-  };
 };
 
 // ============================================================================
