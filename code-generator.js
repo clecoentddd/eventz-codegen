@@ -28,7 +28,7 @@ function generateApplication(config) {
   const extraFiles = [];
 
   let code = `import React, { useState, useEffect } from 'react';
-import { eventStore, mockRabbitMQ } from './eventz-runtime';
+import { eventStore, mockRabbitMQ, startCommandDispatcher } from './eventz-runtime';
 `;
 
   const { modules: projectionModules, imports: projectionImports, registry: projectionRegistry } = generateProjections(slices);

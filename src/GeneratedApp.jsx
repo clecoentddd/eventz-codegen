@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { eventStore, mockRabbitMQ } from './eventz-runtime';
+import { eventStore, mockRabbitMQ, startCommandDispatcher } from './eventz-runtime';
 
 import { listOfCappuccinoToPrepareProjection } from './slices/state-view/SliceListOfCappuccinoToPrepare/index.js';
 import { espressoToPrepareProjection } from './slices/state-view/SliceEspressoToPrepare/index.js';
@@ -211,6 +211,10 @@ const judgeConfirmOrderReady = (intent, history) => {
   // };
 };
 
+const inFlightMarkFrostMilkPrepared = new Set();
+const inFlightMarkEspressoPrepared = new Set();
+const inFlightConfirmOrderReady = new Set();
+
 // ============================================================================
 // AUTOMATION - Process Slices and Apply Judge
 // ============================================================================
@@ -220,88 +224,76 @@ const runAutomation = (events, eventStore) => {
   // User-initiated Order Cappuccino attempts are published via RabbitMQ handlers.
   // Automation: processor
   const listOfCappuccinoToPrepareNeedingAction = processMarkFrostMilkPreparedSlice(events);
+  const listOfCappuccinoToPreparePendingSet = new Set(listOfCappuccinoToPrepareNeedingAction);
+
+  inFlightMarkFrostMilkPrepared.forEach(id => {
+    if (!listOfCappuccinoToPreparePendingSet.has(id)) {
+      inFlightMarkFrostMilkPrepared.delete(id);
+    }
+  });
+
   listOfCappuccinoToPrepareNeedingAction.forEach(orderId => {
+    if (inFlightMarkFrostMilkPrepared.has(orderId)) {
+      return;
+    }
+
+    inFlightMarkFrostMilkPrepared.add(orderId);
     const attemptEvent = attemptMarkFrostMilkPrepared(orderId);
     mockRabbitMQ.publish('commands', 'attempts', attemptEvent).catch((err) => {
       console.error('Failed to publish automation attempt', err);
+      inFlightMarkFrostMilkPrepared.delete(orderId);
     });
   });
   
   // Automation: espresso maker processor
   const espressoToPrepareNeedingAction = processMarkEspressoPreparedSlice(events);
+  const espressoToPreparePendingSet = new Set(espressoToPrepareNeedingAction);
+
+  inFlightMarkEspressoPrepared.forEach(id => {
+    if (!espressoToPreparePendingSet.has(id)) {
+      inFlightMarkEspressoPrepared.delete(id);
+    }
+  });
+
   espressoToPrepareNeedingAction.forEach(orderId => {
+    if (inFlightMarkEspressoPrepared.has(orderId)) {
+      return;
+    }
+
+    inFlightMarkEspressoPrepared.add(orderId);
     const attemptEvent = attemptMarkEspressoPrepared(orderId);
     mockRabbitMQ.publish('commands', 'attempts', attemptEvent).catch((err) => {
       console.error('Failed to publish automation attempt', err);
+      inFlightMarkEspressoPrepared.delete(orderId);
     });
   });
   
   // Automation: processor confirmation
   const espressoReadyNeedingAction = processConfirmOrderReadySlice(events);
+  const espressoReadyPendingSet = new Set(espressoReadyNeedingAction);
+
+  inFlightConfirmOrderReady.forEach(id => {
+    if (!espressoReadyPendingSet.has(id)) {
+      inFlightConfirmOrderReady.delete(id);
+    }
+  });
+
   espressoReadyNeedingAction.forEach(orderId => {
+    if (inFlightConfirmOrderReady.has(orderId)) {
+      return;
+    }
+
+    inFlightConfirmOrderReady.add(orderId);
     const attemptEvent = attemptConfirmOrderReady(orderId);
     mockRabbitMQ.publish('commands', 'attempts', attemptEvent).catch((err) => {
       console.error('Failed to publish automation attempt', err);
+      inFlightConfirmOrderReady.delete(orderId);
     });
   });
   
 };
 
-const COMMAND_EXCHANGE = 'commands';
-const COMMAND_ROUTING_KEY = 'attempts';
-const AUDIT_EXCHANGE = 'audit';
-const AUDIT_ROUTING_KEY = 'errors';
-
-const startCommandDispatcher = (() => {
-  let started = false;
-  return () => {
-    if (started) {
-      return;
-    }
-    started = true;
-
-    mockRabbitMQ.subscribe(COMMAND_EXCHANGE, COMMAND_ROUTING_KEY, async (intentEvent) => {
-      const history = eventStore.getAllEvents();
-      try {
-        const decision = judge(intentEvent, history);
-        const outcomeEvent = decision.approved ? decision.approvalEvent : decision.rejectionEvent;
-
-        if (outcomeEvent) {
-          eventStore.append(outcomeEvent);
-          return;
-        }
-
-        const auditEnvelope = {
-          type: 'CommandUnhandled',
-          data: {
-            attemptType: intentEvent.type,
-            attemptId: intentEvent.id ?? null,
-            reason: 'Judge returned no outcome event.'
-          }
-        };
-
-        mockRabbitMQ.publish(AUDIT_EXCHANGE, AUDIT_ROUTING_KEY, auditEnvelope).catch((err) => {
-          console.error('Failed to publish audit event', err);
-        });
-      } catch (error) {
-        const auditEnvelope = {
-          type: 'CommandFailed',
-          data: {
-            attemptType: intentEvent.type,
-            attemptId: intentEvent.id ?? null,
-            error: error?.message || 'Unknown error'
-          }
-        };
-
-        mockRabbitMQ.publish(AUDIT_EXCHANGE, AUDIT_ROUTING_KEY, auditEnvelope).catch((err) => {
-          console.error('Failed to publish audit event', err);
-        });
-      }
-    });
-  };
-})();
-
-startCommandDispatcher();
+startCommandDispatcher({ judge, eventStore, mockRabbitMQ });
 
 // ============================================================================
 // REACT UI

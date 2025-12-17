@@ -146,3 +146,84 @@ export const mockRabbitMQ = {
     };
   }
 };
+
+const COMMAND_EXCHANGE = 'commands';
+const COMMAND_ROUTING_KEY = 'attempts';
+const AUDIT_EXCHANGE = 'audit';
+const AUDIT_ROUTING_KEY = 'errors';
+
+const runtimeState = globalThis.__eventzRuntime ?? (globalThis.__eventzRuntime = {});
+const dispatcherState = runtimeState.commandDispatcher ?? (runtimeState.commandDispatcher = {
+  started: false,
+  unsubscribe: null
+});
+
+export const startCommandDispatcher = ({
+  judge,
+  eventStore: store = eventStore,
+  mockRabbitMQ: bus = mockRabbitMQ,
+  commandExchange = COMMAND_EXCHANGE,
+  commandRoutingKey = COMMAND_ROUTING_KEY,
+  auditExchange = AUDIT_EXCHANGE,
+  auditRoutingKey = AUDIT_ROUTING_KEY
+} = {}) => {
+  if (typeof judge !== 'function') {
+    throw new Error('startCommandDispatcher requires a judge function.');
+  }
+
+  if (dispatcherState.unsubscribe) {
+    try {
+      dispatcherState.unsubscribe();
+    } catch (err) {
+      console.warn('⚠️ Failed to unsubscribe prior dispatcher instance', err);
+    }
+    dispatcherState.unsubscribe = null;
+    dispatcherState.started = false;
+  }
+
+  dispatcherState.started = true;
+
+  dispatcherState.unsubscribe = bus.subscribe(commandExchange, commandRoutingKey, async (intentEvent) => {
+    const history = store.getAllEvents();
+
+    try {
+      const decision = await Promise.resolve(judge(intentEvent, history));
+      const outcomeEvent = decision?.approved ? decision.approvalEvent : decision?.rejectionEvent;
+
+      if (outcomeEvent) {
+        store.append(outcomeEvent);
+        return;
+      }
+
+      const auditEnvelope = {
+        type: 'CommandUnhandled',
+        data: {
+          attemptType: intentEvent.type,
+          attemptId: intentEvent.id ?? null,
+          reason: 'Judge returned no outcome event.'
+        }
+      };
+
+      bus.publish(auditExchange, auditRoutingKey, auditEnvelope).catch((err) => {
+        console.error('Failed to publish audit event', err);
+      });
+    } catch (error) {
+      const auditEnvelope = {
+        type: 'CommandFailed',
+        data: {
+          attemptType: intentEvent.type,
+          attemptId: intentEvent.id ?? null,
+          error: error?.message || 'Unknown error'
+        }
+      };
+
+      bus.publish(auditExchange, auditRoutingKey, auditEnvelope).catch((errPublish) => {
+        console.error('Failed to publish audit event', errPublish);
+      });
+    }
+  });
+
+  runtimeState.commandDispatcher = dispatcherState;
+
+  return dispatcherState.unsubscribe;
+};
