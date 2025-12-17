@@ -1,0 +1,1001 @@
+{
+  "slices": [
+    {
+      "id": "3458764652834972153",
+      "status": "Created",
+      "index": 1,
+      "title": "slice: Order Cappuccino",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_CHANGE",
+      "commands": [
+        {
+          "id": "3458764652834850512",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Order Cappuccino",
+          "title": "Order Cappuccino",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "COMMAND",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834726985",
+              "type": "OUTBOUND",
+              "title": "Cappuccino Ordered",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "3458764652834850515",
+              "type": "INBOUND",
+              "title": "Drink Selection",
+              "elementType": "SCREEN"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "3458764652834726985",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Order Cappuccino",
+          "title": "Cappuccino Ordered",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "EVENT",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834972763",
+              "type": "OUTBOUND",
+              "title": "List of cappuccino to prepare",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "3458764652834850512",
+              "type": "INBOUND",
+              "title": "Order Cappuccino",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "readmodels": [],
+      "screens": [
+        {
+          "id": "3458764652834850515",
+          "tags": [],
+          "groupId": "3458764652834850518",
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Order Cappuccino",
+          "title": "Drink Selection",
+          "fields": [
+            {
+              "name": "orderId",
+              "idAttribute": true,
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": []
+            }
+          ],
+          "type": "SCREEN",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834850512",
+              "type": "OUTBOUND",
+              "title": "Order Cappuccino",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652835192964",
+      "status": "Created",
+      "index": 3,
+      "title": "slice: List of cappuccino to prepare",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_VIEW",
+      "commands": [],
+      "events": [],
+      "readmodels": [
+        {
+          "id": "3458764652834972763",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: List of cappuccino to prepare",
+          "title": "List of cappuccino to prepare",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "READMODEL",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834972773",
+              "type": "OUTBOUND",
+              "title": "List of drinks to prepared",
+              "elementType": "SCREEN"
+            },
+            {
+              "id": "3458764652835081738",
+              "type": "OUTBOUND",
+              "title": "processor",
+              "elementType": "AUTOMATION"
+            },
+            {
+              "id": "3458764652834726985",
+              "type": "INBOUND",
+              "title": "Cappuccino Ordered",
+              "elementType": "EVENT"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screens": [
+        {
+          "id": "3458764652834972773",
+          "tags": [],
+          "groupId": "3458764652834972780",
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: List of cappuccino to prepare",
+          "title": "List of drinks to prepared",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "SCREEN",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834972763",
+              "type": "INBOUND",
+              "title": "List of cappuccino to prepare",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652835193454",
+      "status": "Created",
+      "index": 5,
+      "title": "slice: Frost Prepare Milk",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_CHANGE",
+      "commands": [
+        {
+          "id": "3458764652835081745",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Frost Prepare Milk",
+          "title": "Mark Frost Milk Prepared",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "COMMAND",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834727195",
+              "type": "OUTBOUND",
+              "title": "Frost Milk Prepared",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "3458764652835081738",
+              "type": "INBOUND",
+              "title": "processor",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "3458764652834727195",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Frost Prepare Milk",
+          "title": "Frost Milk Prepared",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "EVENT",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835193664",
+              "type": "OUTBOUND",
+              "title": "Espresso to prepare",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "3458764652835081745",
+              "type": "INBOUND",
+              "title": "Mark Frost Milk Prepared",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [
+        {
+          "id": "3458764652835081738",
+          "tags": [],
+          "groupId": "3458764652835081744",
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Frost Prepare Milk",
+          "title": "processor",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "AUTOMATION",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835081745",
+              "type": "OUTBOUND",
+              "title": "Mark Frost Milk Prepared",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "3458764652834972763",
+              "type": "INBOUND",
+              "title": "List of cappuccino to prepare",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652835334234",
+      "status": "Created",
+      "index": 7,
+      "title": "slice: Espresso to prepare",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_VIEW",
+      "commands": [],
+      "events": [],
+      "readmodels": [
+        {
+          "id": "3458764652835193664",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Espresso to prepare",
+          "title": "Espresso to prepare",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "READMODEL",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835193675",
+              "type": "OUTBOUND",
+              "title": "Espresso to prepare",
+              "elementType": "SCREEN"
+            },
+            {
+              "id": "3458764652835334856",
+              "type": "OUTBOUND",
+              "title": "espresso maker processor",
+              "elementType": "AUTOMATION"
+            },
+            {
+              "id": "3458764652834727195",
+              "type": "INBOUND",
+              "title": "Frost Milk Prepared",
+              "elementType": "EVENT"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screens": [
+        {
+          "id": "3458764652835193675",
+          "tags": [],
+          "groupId": "3458764652835193682",
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Espresso to prepare",
+          "title": "Espresso to prepare",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "SCREEN",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835193664",
+              "type": "INBOUND",
+              "title": "Espresso to prepare",
+              "elementType": "READMODEL"
+            }
+          ],
+          "listElement": false,
+          "todoList": false,
+          "apiEndpoint": null,
+          "service": null,
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652835450762",
+      "status": "Created",
+      "index": 9,
+      "title": "slice: Mark Espresso Prepared",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_CHANGE",
+      "commands": [
+        {
+          "id": "3458764652835334862",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Mark Espresso Prepared",
+          "title": "Mark Espresso Prepared",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "COMMAND",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834727470",
+              "type": "OUTBOUND",
+              "title": "Espresso Prepared",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "3458764652835334856",
+              "type": "INBOUND",
+              "title": "espresso maker processor",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "3458764652834727470",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Mark Espresso Prepared",
+          "title": "Espresso Prepared",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "EVENT",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835546482",
+              "type": "OUTBOUND",
+              "title": "Espresso ready",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "3458764652835334862",
+              "type": "INBOUND",
+              "title": "Mark Espresso Prepared",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [
+        {
+          "id": "3458764652835334856",
+          "tags": [],
+          "groupId": "3458764652835334861",
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Mark Espresso Prepared",
+          "title": "espresso maker processor",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "AUTOMATION",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835334862",
+              "type": "OUTBOUND",
+              "title": "Mark Espresso Prepared",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "3458764652835193664",
+              "type": "INBOUND",
+              "title": "Espresso to prepare",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652835750216",
+      "status": "Created",
+      "index": 11,
+      "title": "slice: Order ready",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_VIEW",
+      "commands": [],
+      "events": [],
+      "readmodels": [
+        {
+          "id": "3458764652835546482",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Order ready",
+          "title": "Espresso ready",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "READMODEL",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835546471",
+              "type": "OUTBOUND",
+              "title": "processor confirmation",
+              "elementType": "AUTOMATION"
+            },
+            {
+              "id": "3458764652834727470",
+              "type": "INBOUND",
+              "title": "Espresso Prepared",
+              "elementType": "EVENT"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screens": [],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652835750569",
+      "status": "Created",
+      "index": 13,
+      "title": "slice: Confirm Order Ready",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_CHANGE",
+      "commands": [
+        {
+          "id": "3458764652835546477",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Confirm Order Ready",
+          "title": "Confirm Order Ready",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "COMMAND",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652834727623",
+              "type": "OUTBOUND",
+              "title": "Cappuccino Ready",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "3458764652835546471",
+              "type": "INBOUND",
+              "title": "processor confirmation",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "3458764652834727623",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Confirm Order Ready",
+          "title": "Cappuccino Ready",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "EVENT",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835546365",
+              "type": "OUTBOUND",
+              "title": "cappuccino ready",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "3458764652835546477",
+              "type": "INBOUND",
+              "title": "Confirm Order Ready",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [
+        {
+          "id": "3458764652835546471",
+          "tags": [],
+          "groupId": "3458764652835546476",
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: Confirm Order Ready",
+          "title": "processor confirmation",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "AUTOMATION",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835546477",
+              "type": "OUTBOUND",
+              "title": "Confirm Order Ready",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "3458764652835546482",
+              "type": "INBOUND",
+              "title": "Espresso ready",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652835750858",
+      "status": "Created",
+      "index": 15,
+      "title": "slice: order ready",
+      "context": "eventZ Cappuccino",
+      "sliceType": "STATE_VIEW",
+      "commands": [],
+      "events": [],
+      "readmodels": [
+        {
+          "id": "3458764652835546365",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: order ready",
+          "title": "cappuccino ready",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "READMODEL",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835546371",
+              "type": "OUTBOUND",
+              "title": "screen",
+              "elementType": "SCREEN"
+            },
+            {
+              "id": "3458764652834727623",
+              "type": "INBOUND",
+              "title": "Cappuccino Ready",
+              "elementType": "EVENT"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screens": [
+        {
+          "id": "3458764652835546371",
+          "tags": [],
+          "groupId": "3458764652835546381",
+          "elementContext": "INTERNAL",
+          "modelContext": "eventZ Cappuccino",
+          "context": "INTERNAL",
+          "slice": "slice: order ready",
+          "title": "screen",
+          "fields": [
+            {
+              "name": "orderId",
+              "type": "UUID",
+              "cardinality": "Single",
+              "subfields": [],
+              "generated": true,
+              "idAttribute": true
+            }
+          ],
+          "type": "SCREEN",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652835546365",
+              "type": "INBOUND",
+              "title": "cappuccino ready",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    }
+  ],
+  "flows": [],
+  "aggregates": [],
+  "actors": [],
+  "context": "eventZ Cappuccino",
+  "codeGen": {
+    "application": "Context"
+  },
+  "boardId": "uXjVIKUE2jo=",
+  "sliceGroups": [],
+  "sliceImages": [],
+  "sliceLayouts": []
+}

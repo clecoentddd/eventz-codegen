@@ -1,0 +1,585 @@
+{
+  "slices": [
+    {
+      "id": "3458764652514572997",
+      "status": "Created",
+      "index": 1,
+      "title": "slice: Customercreate",
+      "context": "Client Compte CodeGen",
+      "sliceType": "STATE_CHANGE",
+      "commands": [
+        {
+          "id": "3458764652514453676",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: Customercreate",
+          "title": "Customercreate",
+          "fields": [
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "clientName",
+              "type": "String",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "COMMAND",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652514453068",
+              "type": "OUTBOUND",
+              "title": "CustomerCreated",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "3458764652514453685",
+              "type": "INBOUND",
+              "title": "Create a customer",
+              "elementType": "SCREEN"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "3458764652514453068",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: Customercreate",
+          "title": "CustomerCreated",
+          "fields": [
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "clientName",
+              "type": "String",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "EVENT",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652514725525",
+              "type": "OUTBOUND",
+              "title": "List of new customers",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "3458764652514453676",
+              "type": "INBOUND",
+              "title": "Customercreate",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "readmodels": [],
+      "screens": [
+        {
+          "id": "3458764652514453685",
+          "tags": [],
+          "groupId": "3458764652514453689",
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: Customercreate",
+          "title": "Create a customer",
+          "fields": [
+            {
+              "name": "clientName",
+              "type": "String",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": false
+            }
+          ],
+          "type": "SCREEN",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652514453676",
+              "type": "OUTBOUND",
+              "title": "Customercreate",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652514725731",
+      "status": "Created",
+      "index": 3,
+      "title": "slice: customer list projection",
+      "context": "Client Compte CodeGen",
+      "sliceType": "STATE_VIEW",
+      "commands": [],
+      "events": [],
+      "readmodels": [
+        {
+          "id": "3458764652514725525",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: customer list projection",
+          "title": "List of new customers",
+          "fields": [
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "clientName",
+              "type": "String",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "READMODEL",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652514840318",
+              "type": "OUTBOUND",
+              "title": "account creation processor",
+              "elementType": "AUTOMATION"
+            },
+            {
+              "id": "3458764652514725548",
+              "type": "OUTBOUND",
+              "title": "List of customers",
+              "elementType": "SCREEN"
+            },
+            {
+              "id": "3458764652514453068",
+              "type": "INBOUND",
+              "title": "CustomerCreated",
+              "elementType": "EVENT"
+            }
+          ],
+          "listElement": true,
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screens": [
+        {
+          "id": "3458764652514725548",
+          "tags": [],
+          "groupId": "3458764652514725553",
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: customer list projection",
+          "title": "List of customers",
+          "fields": [
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "clientName",
+              "type": "String",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "SCREEN",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652514725525",
+              "type": "INBOUND",
+              "title": "List of new customers",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652514840590",
+      "status": "Created",
+      "index": 5,
+      "title": "slice: Accountcreate",
+      "context": "Client Compte CodeGen",
+      "sliceType": "STATE_CHANGE",
+      "commands": [
+        {
+          "id": "3458764652514840321",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: Accountcreate",
+          "title": "Accountcreate",
+          "fields": [
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "accountId",
+              "type": "UUID",
+              "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "COMMAND",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652514453332",
+              "type": "OUTBOUND",
+              "title": "AccountCreated",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "3458764652514840318",
+              "type": "INBOUND",
+              "title": "account creation processor",
+              "elementType": "AUTOMATION"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "events": [
+        {
+          "id": "3458764652514453332",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: Accountcreate",
+          "title": "AccountCreated",
+          "fields": [
+            {
+              "name": "accountId",
+              "type": "UUID",
+              "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "EVENT",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652515292889",
+              "type": "OUTBOUND",
+              "title": "List of Accounts",
+              "elementType": "READMODEL"
+            },
+            {
+              "id": "3458764652514840321",
+              "type": "INBOUND",
+              "title": "Accountcreate",
+              "elementType": "COMMAND"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "readmodels": [],
+      "screens": [],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [
+        {
+          "id": "3458764652514840318",
+          "tags": [],
+          "groupId": "3458764652514840320",
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: Accountcreate",
+          "title": "account creation processor",
+          "fields": [
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "AUTOMATION",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652514840321",
+              "type": "OUTBOUND",
+              "title": "Accountcreate",
+              "elementType": "COMMAND"
+            },
+            {
+              "id": "3458764652514725525",
+              "type": "INBOUND",
+              "title": "List of new customers",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    },
+    {
+      "id": "3458764652515442988",
+      "status": "Created",
+      "index": 7,
+      "title": "slice: account list projection",
+      "context": "Client Compte CodeGen",
+      "sliceType": "STATE_VIEW",
+      "commands": [],
+      "events": [],
+      "readmodels": [
+        {
+          "id": "3458764652515292889",
+          "tags": [],
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: account list projection",
+          "title": "List of Accounts",
+          "fields": [
+            {
+              "name": "accountId",
+              "type": "UUID",
+              "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "READMODEL",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652515292898",
+              "type": "OUTBOUND",
+              "title": "List of accounts",
+              "elementType": "SCREEN"
+            },
+            {
+              "id": "3458764652514453332",
+              "type": "INBOUND",
+              "title": "AccountCreated",
+              "elementType": "EVENT"
+            }
+          ],
+          "listElement": true,
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screens": [
+        {
+          "id": "3458764652515292898",
+          "tags": [],
+          "groupId": "3458764652515292901",
+          "elementContext": "INTERNAL",
+          "modelContext": "Client Compte CodeGen",
+          "context": "INTERNAL",
+          "slice": "slice: account list projection",
+          "title": "List of accounts",
+          "fields": [
+            {
+              "name": "accountId",
+              "type": "UUID",
+              "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            },
+            {
+              "name": "clientId",
+              "type": "UUID",
+              "example": "0x1234",
+              "subfields": [],
+              "cardinality": "Single",
+              "idAttribute": true
+            }
+          ],
+          "type": "SCREEN",
+          "description": "",
+          "aggregate": "default",
+          "aggregateDependencies": [],
+          "dependencies": [
+            {
+              "id": "3458764652515292889",
+              "type": "INBOUND",
+              "title": "List of Accounts",
+              "elementType": "READMODEL"
+            }
+          ],
+          "createsAggregate": false,
+          "triggers": [],
+          "sketched": false,
+          "prototype": {
+            "activeByDefault": false
+          }
+        }
+      ],
+      "screenImages": [],
+      "screenLayouts": [],
+      "processors": [],
+      "tables": [],
+      "specifications": [],
+      "actors": [],
+      "aggregates": []
+    }
+  ],
+  "flows": [],
+  "aggregates": [],
+  "actors": [],
+  "context": "Client Compte CodeGen",
+  "codeGen": {
+    "application": "Context"
+  },
+  "boardId": "uXjVIKUE2jo=",
+  "sliceGroups": [],
+  "sliceImages": [],
+  "sliceLayouts": []
+}
