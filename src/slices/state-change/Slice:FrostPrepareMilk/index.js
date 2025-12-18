@@ -1,16 +1,16 @@
-import { listOfCappuccinoToPrepareProjection } from '../../state-view/SliceListOfCappuccinoToPrepare/index.js';
+import { listOfCappuccinoToPrepareProjection } from '../../state-view/Slice:ListOfCappuccinoToPrepare/index.js';
 
 // ============================================================================
 // STATE CHANGE SLICE: slice: Frost Prepare Milk
 // ============================================================================
 
-export const attemptMarkFrostMilkPrepared = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+export const attemptMarkFrostMilkPrepared = (orderidOverride) => {
+  const orderid = orderidOverride ?? `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   return {
     type: 'MarkFrostMilkPreparedAttempted',
     data: {
-      orderId: orderId,
+      orderId: orderid,
     }
   };
 };

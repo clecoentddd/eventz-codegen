@@ -1,16 +1,16 @@
-import { espressoReadyProjection } from '../../state-view/SliceOrderReady/index.js';
+import { istOfEspressoReadyProjection } from '../../state-view/Slice:EspressoReady/index.js';
 
 // ============================================================================
 // STATE CHANGE SLICE: slice: Confirm Order Ready
 // ============================================================================
 
-export const attemptConfirmOrderReady = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+export const attemptConfirmOrderReady = (orderidOverride) => {
+  const orderid = orderidOverride ?? `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   return {
     type: 'ConfirmOrderReadyAttempted',
     data: {
-      orderId: orderId,
+      orderId: orderid,
     }
   };
 };
@@ -18,7 +18,7 @@ export const attemptConfirmOrderReady = (orderIdOverride) => {
 
 // STATE CHANGE: Automation slice for processor confirmation
 export const processConfirmOrderReadySlice = (events) => {
-  const pendingEntities = espressoReadyProjection(events);
+  const pendingEntities = istOfEspressoReadyProjection(events);
   const entityIds = Object.keys(pendingEntities);
   
   const processedIds = new Set(

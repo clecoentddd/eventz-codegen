@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { eventStore, mockRabbitMQ, startCommandDispatcher } from './eventz-runtime';
 
-import { listOfCappuccinoToPrepareProjection } from './slices/state-view/SliceListOfCappuccinoToPrepare/index.js';
-import { espressoToPrepareProjection } from './slices/state-view/SliceEspressoToPrepare/index.js';
-import { espressoReadyProjection } from './slices/state-view/SliceOrderReady/index.js';
-import { orderReadyProjection } from './slices/state-view/SliceOrderReady_2/index.js';
-import { attemptOrderEspresso } from './slices/state-change/SliceEspressoOrdered/index.js';
-import { attemptOrderCappuccino } from './slices/state-change/SliceOrderCappuccino/index.js';
+import { listOfCappuccinoToPrepareProjection } from './slices/state-view/Slice:ListOfCappuccinoToPrepare/index.js';
+import { espressoToPrepareProjection } from './slices/state-view/Slice:EspressoToPrepare/index.js';
+import { istOfEspressoReadyProjection } from './slices/state-view/Slice:EspressoReady/index.js';
+import { orderReadyProjection } from './slices/state-view/Slice:OrderReady/index.js';
+import { attemptOrderEspresso } from './slices/state-change/Slice:EspressoOrdered/index.js';
+import { attemptOrderCappuccino } from './slices/state-change/Slice:OrderCappuccino/index.js';
 
-import { processMarkFrostMilkPreparedSlice, attemptMarkFrostMilkPrepared } from './slices/state-change/SliceFrostPrepareMilk/index.js';
-import { processMarkEspressoPreparedSlice, attemptMarkEspressoPrepared } from './slices/state-change/SliceMarkEspressoPrepared/index.js';
-import { processConfirmOrderReadySlice, attemptConfirmOrderReady } from './slices/state-change/SliceConfirmOrderReady/index.js';
 
-// Generated from EventZ configuration: eventZ Cappuccino
-// Total slices: 9
+import { processMarkFrostMilkPreparedSlice, attemptMarkFrostMilkPrepared } from './slices/state-change/Slice:FrostPrepareMilk/index.js';
+import { processMarkEspressoPreparedSlice, attemptMarkEspressoPrepared } from './slices/state-change/Slice:MarkEspressoPrepared/index.js';
+import { processConfirmOrderReadySlice, attemptConfirmOrderReady } from './slices/state-change/Slice:ConfirmOrderReady/index.js';
+
+
+import { judgeOrderCappuccino } from './slices/state-change/Slice:OrderCappuccino/judge.js';// Generated from EventZ configuration: eventZ Cappuccino
 
 // ============================================================================
 // JUDGE - Business Rules (Pure Function: Intent + History => Decision)
@@ -38,12 +39,6 @@ const judge = (intentEvent, eventHistory) => {
 
 const judgeOrderEspresso = (intent, history) => {
   // TODO: Implement your business rules here
-  // Example rules you might want to add:
-  // - Validate required fields
-  // - Check for duplicates
-  // - Verify dependencies exist
-  // - Check business constraints
-  
   // For now, auto-approve everything
   return {
     approved: true,
@@ -71,49 +66,8 @@ const judgeOrderEspresso = (intent, history) => {
   // };
 };
 
-const judgeOrderCappuccino = (intent, history) => {
-  // TODO: Implement your business rules here
-  // Example rules you might want to add:
-  // - Validate required fields
-  // - Check for duplicates
-  // - Verify dependencies exist
-  // - Check business constraints
-  
-  // For now, auto-approve everything
-  return {
-    approved: true,
-    approvalEvent: {
-      type: 'CappuccinoOrdered',
-      data: {
-        attemptId: intent.id,
-        orderId: intent.data.orderId,
-      }
-    }
-  };
-  
-  // Example rejection:
-  // return {
-  //   approved: false,
-  //   reason: 'Your rejection reason here',
-  //   rejectionEvent: {
-  //     type: 'CappuccinoOrderedRejected',
-  //     data: {
-  //       attemptId: intent.id,
-  //       reason: 'Your rejection reason here',
-  //       ...intent.data
-  //     }
-  //   }
-  // };
-};
-
 const judgeMarkFrostMilkPrepared = (intent, history) => {
   // TODO: Implement your business rules here
-  // Example rules you might want to add:
-  // - Validate required fields
-  // - Check for duplicates
-  // - Verify dependencies exist
-  // - Check business constraints
-  
   // For now, auto-approve everything
   return {
     approved: true,
@@ -143,12 +97,6 @@ const judgeMarkFrostMilkPrepared = (intent, history) => {
 
 const judgeMarkEspressoPrepared = (intent, history) => {
   // TODO: Implement your business rules here
-  // Example rules you might want to add:
-  // - Validate required fields
-  // - Check for duplicates
-  // - Verify dependencies exist
-  // - Check business constraints
-  
   // For now, auto-approve everything
   return {
     approved: true,
@@ -178,12 +126,6 @@ const judgeMarkEspressoPrepared = (intent, history) => {
 
 const judgeConfirmOrderReady = (intent, history) => {
   // TODO: Implement your business rules here
-  // Example rules you might want to add:
-  // - Validate required fields
-  // - Check for duplicates
-  // - Verify dependencies exist
-  // - Check business constraints
-  
   // For now, auto-approve everything
   return {
     approved: true,
@@ -269,16 +211,16 @@ const runAutomation = (events, eventStore) => {
   });
   
   // Automation: processor confirmation
-  const espressoReadyNeedingAction = processConfirmOrderReadySlice(events);
-  const espressoReadyPendingSet = new Set(espressoReadyNeedingAction);
+  const istOfEspressoReadyNeedingAction = processConfirmOrderReadySlice(events);
+  const istOfEspressoReadyPendingSet = new Set(istOfEspressoReadyNeedingAction);
 
   inFlightConfirmOrderReady.forEach(id => {
-    if (!espressoReadyPendingSet.has(id)) {
+    if (!istOfEspressoReadyPendingSet.has(id)) {
       inFlightConfirmOrderReady.delete(id);
     }
   });
 
-  espressoReadyNeedingAction.forEach(orderId => {
+  istOfEspressoReadyNeedingAction.forEach(orderId => {
     if (inFlightConfirmOrderReady.has(orderId)) {
       return;
     }
@@ -335,10 +277,10 @@ export default function EventZApp() {
   }, []);
 
   // Build projections
-  const cappuccinoOrdereds = listOfCappuccinoToPrepareProjection(events);
-  const frostMilkPrepareds = espressoToPrepareProjection(events);
-  const espressoPrepareds = espressoReadyProjection(events);
-  const drinkReadys = orderReadyProjection(events);
+  const listOfCappuccinoToPrepare = listOfCappuccinoToPrepareProjection(events);
+  const espressoToPrepare = espressoToPrepareProjection(events);
+  const istOfEspressoReady = istOfEspressoReadyProjection(events);
+  const orderReady = orderReadyProjection(events);
 
   const handleOrderEspresso = () => {
     setError('');
@@ -429,15 +371,15 @@ export default function EventZApp() {
           {/* List of cappuccino to prepare */}
           <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-blue-500/50">
             <h2 className="text-xl font-bold text-white mb-3">
-              List of cappuccino to prepare ({Object.keys(cappuccinoOrdereds).length})
+              List of cappuccino to prepare ({Object.keys(listOfCappuccinoToPrepare).length})
             </h2>
             <div className="space-y-2 max-h-48 overflow-y-auto">
-              {Object.values(cappuccinoOrdereds).map(item => (
+              {Object.values(listOfCappuccinoToPrepare).map(item => (
                 <div key={item.orderId} className="p-3 bg-blue-500/20 border border-blue-500/50 rounded">
                   <div className="text-white text-sm">orderId: {item.orderId}</div>
                 </div>
               ))}
-              {Object.keys(cappuccinoOrdereds).length === 0 && (
+              {Object.keys(listOfCappuccinoToPrepare).length === 0 && (
                 <p className="text-purple-200">No items yet</p>
               )}
             </div>
@@ -446,32 +388,32 @@ export default function EventZApp() {
           {/* Espresso to prepare */}
           <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-blue-500/50">
             <h2 className="text-xl font-bold text-white mb-3">
-              Espresso to prepare ({Object.keys(frostMilkPrepareds).length})
+              Espresso to prepare ({Object.keys(espressoToPrepare).length})
             </h2>
             <div className="space-y-2 max-h-48 overflow-y-auto">
-              {Object.values(frostMilkPrepareds).map(item => (
+              {Object.values(espressoToPrepare).map(item => (
                 <div key={item.orderId} className="p-3 bg-blue-500/20 border border-blue-500/50 rounded">
                   <div className="text-white text-sm">orderId: {item.orderId}</div>
                 </div>
               ))}
-              {Object.keys(frostMilkPrepareds).length === 0 && (
+              {Object.keys(espressoToPrepare).length === 0 && (
                 <p className="text-purple-200">No items yet</p>
               )}
             </div>
           </div>
 
-          {/* Espresso ready */}
+          {/* Ist of Espresso ready */}
           <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-blue-500/50">
             <h2 className="text-xl font-bold text-white mb-3">
-              Espresso ready ({Object.keys(espressoPrepareds).length})
+              Ist of Espresso ready ({Object.keys(istOfEspressoReady).length})
             </h2>
             <div className="space-y-2 max-h-48 overflow-y-auto">
-              {Object.values(espressoPrepareds).map(item => (
+              {Object.values(istOfEspressoReady).map(item => (
                 <div key={item.orderId} className="p-3 bg-blue-500/20 border border-blue-500/50 rounded">
                   <div className="text-white text-sm">orderId: {item.orderId}</div>
                 </div>
               ))}
-              {Object.keys(espressoPrepareds).length === 0 && (
+              {Object.keys(istOfEspressoReady).length === 0 && (
                 <p className="text-purple-200">No items yet</p>
               )}
             </div>
@@ -480,15 +422,15 @@ export default function EventZApp() {
           {/* Order ready */}
           <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-blue-500/50">
             <h2 className="text-xl font-bold text-white mb-3">
-              Order ready ({Object.keys(drinkReadys).length})
+              Order ready ({Object.keys(orderReady).length})
             </h2>
             <div className="space-y-2 max-h-48 overflow-y-auto">
-              {Object.values(drinkReadys).map(item => (
+              {Object.values(orderReady).map(item => (
                 <div key={item.orderId} className="p-3 bg-blue-500/20 border border-blue-500/50 rounded">
                   <div className="text-white text-sm">orderId: {item.orderId}</div>
                 </div>
               ))}
-              {Object.keys(drinkReadys).length === 0 && (
+              {Object.keys(orderReady).length === 0 && (
                 <p className="text-purple-200">No items yet</p>
               )}
             </div>

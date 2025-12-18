@@ -1,6 +1,6 @@
+
 // ============================================================================
 // EVENTZ CODE GENERATOR
-// Generates complete event-sourced applications from JSON configuration
 // ============================================================================
 
 import fs from 'fs';
@@ -36,19 +36,19 @@ import { eventStore, mockRabbitMQ, startCommandDispatcher } from './eventz-runti
 
   const { modules: stateChangeModules, commands: commandImports, automation: automationImports } = generateStateChangeSlices(slices, { projectionRegistry });
   extraFiles.push(...stateChangeModules);
+  
+  const { code: judgeCode, modules: judgeModules, imports: judgeImports } = generateJudgeRules(slices);
+  extraFiles.push(...judgeModules);
 
   const reactUI = generateReactUI(slices, config, { projectionImports, commandImports });
   const automation = generateAutomation(slices, { automationImports });
 
-  const importBlocks = [reactUI.imports, automation.imports].filter(Boolean).join('');
+  const importBlocks = [reactUI.imports, automation.imports, ...judgeImports].filter(Boolean).join('\n');
   code += importBlocks ? `\n${importBlocks}` : '\n';
 
-  code += `// Generated from EventZ configuration: ${config.context}
-// Total slices: ${slices.length}
+  code += `// Generated from EventZ configuration: ${config.context}\n\n`;
 
-`;
-
-  code += generateJudgeRules(slices);
+  code += judgeCode;
   code += automation.code;
   code += reactUI.code;
 
@@ -56,44 +56,51 @@ import { eventStore, mockRabbitMQ, startCommandDispatcher } from './eventz-runti
 }
 
 // ============================================================================
-// USAGE EXAMPLE
+// SCRIPT EXECUTION
 // ============================================================================
 
 const main = async () => {
-  const configPath = await selectConfigFile(__dirname);
-  const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+  try {
+    const configPath = await selectConfigFile(__dirname);
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
 
-  console.log('\n🔍 Validating configuration...');
-  validateConfiguration(config);
+    console.log('\n🔍 Validating configuration...');
+    validateConfiguration(config);
 
-  const { mainCode, extraFiles } = generateApplication(config);
+    const { mainCode, extraFiles } = generateApplication(config);
 
-  const outputDir = path.resolve(__dirname, './src');
-  if (!fs.existsSync(outputDir)) {
-    fs.mkdirSync(outputDir, { recursive: true });
-  }
-
-  const slicesRoot = path.resolve(outputDir, 'slices');
-  if (fs.existsSync(slicesRoot)) {
-    fs.rmSync(slicesRoot, { recursive: true, force: true });
-  }
-
-  const outputPath = path.resolve(outputDir, 'GeneratedApp.jsx');
-  fs.writeFileSync(outputPath, mainCode);
-
-  extraFiles.forEach(({ path: relativePath, content }) => {
-    const targetPath = path.resolve(outputDir, relativePath);
-    const targetDir = path.dirname(targetPath);
-    if (!fs.existsSync(targetDir)) {
-      fs.mkdirSync(targetDir, { recursive: true });
+    const outputDir = path.resolve(__dirname, './src');
+    if (!fs.existsSync(outputDir)) {
+      fs.mkdirSync(outputDir, { recursive: true });
     }
-    fs.writeFileSync(targetPath, content);
-  });
 
-  console.log(`✅ Application generated successfully! Output written to ${outputPath}`);
+    const slicesRoot = path.resolve(outputDir, 'slices');
+    if (fs.existsSync(slicesRoot)) {
+      fs.rmSync(slicesRoot, { recursive: true, force: true });
+    }
+    fs.mkdirSync(slicesRoot, { recursive: true });
+
+    const outputPath = path.resolve(outputDir, 'GeneratedApp.jsx');
+    fs.writeFileSync(outputPath, mainCode);
+    console.log(`✅ Application generated: ${outputPath}`);
+
+    extraFiles.forEach(({ path: relativePath, content }) => {
+      const targetPath = path.resolve(outputDir, relativePath);
+      const targetDir = path.dirname(targetPath);
+      if (!fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+      }
+      fs.writeFileSync(targetPath, content);
+      console.log(`  - Wrote additional file: ${targetPath}`);
+    });
+
+    console.log('\n🎉 Generation complete!');
+
+  } catch (error) {
+    console.error('\n❌ Generation failed:', error.message);
+    // console.error(error.stack);
+    process.exit(1);
+  }
 };
 
-main().catch((error) => {
-  console.error('❌ Generation failed:', error);
-  process.exit(1);
-});
+main();

@@ -1,16 +1,16 @@
-import { espressoToPrepareProjection } from '../../state-view/SliceEspressoToPrepare/index.js';
+import { espressoToPrepareProjection } from '../../state-view/Slice:EspressoToPrepare/index.js';
 
 // ============================================================================
 // STATE CHANGE SLICE: slice: Mark Espresso Prepared
 // ============================================================================
 
-export const attemptMarkEspressoPrepared = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+export const attemptMarkEspressoPrepared = (orderidOverride) => {
+  const orderid = orderidOverride ?? `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   return {
     type: 'MarkEspressoPreparedAttempted',
     data: {
-      orderId: orderId,
+      orderId: orderid,
     }
   };
 };

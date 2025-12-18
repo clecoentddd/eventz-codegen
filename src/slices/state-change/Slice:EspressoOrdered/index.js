@@ -2,13 +2,13 @@
 // STATE CHANGE SLICE: slice: Espresso Ordered
 // ============================================================================
 
-export const attemptOrderEspresso = (orderIdOverride) => {
-  const orderId = orderIdOverride ?? `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+export const attemptOrderEspresso = (orderidOverride) => {
+  const orderid = orderidOverride ?? `ord_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   return {
     type: 'OrderEspressoAttempted',
     data: {
-      orderId: orderId,
+      orderId: orderid,
     }
   };
 };
