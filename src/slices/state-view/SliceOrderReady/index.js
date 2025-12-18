@@ -1,24 +1,22 @@
 // ============================================================================
-// STATE VIEW SLICE: slice: Order ready
+// STATE VIEW SLICE: slice: order ready
 // ============================================================================
 
-// STATE VIEW: Espresso ready (TODO)
-export const espressoReadyProjection = (events) => {
-  return events.reduce((espressoPrepareds, event) => {
+// STATE VIEW: Order ready (TODO)
+export const orderReadyProjection = (events) => {
+  return events.reduce((drinkReadys, event) => {
     switch (event.type) {
-      case 'EspressoPrepared':
-        espressoPrepareds[event.data.orderId] = {
+      case 'DrinkReady':
+        drinkReadys[event.data.orderId] = {
           orderId: event.data.orderId,
           createdAt: event.timestamp
         };
         break;
-      case 'DrinkReady':
-        delete espressoPrepareds[event.data.orderId];
-        break;
+
       default:
         break;
     }
-    return espressoPrepareds;
+    return drinkReadys;
   }, {});
 };
 

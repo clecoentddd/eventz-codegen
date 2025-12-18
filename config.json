@@ -17,11 +17,11 @@
           "fields": [
             {
               "name": "orderId",
-              "generated": true,
-              "idAttribute": true,
               "type": "UUID",
+              "generated": true,
+              "subfields": [],
               "cardinality": "Single",
-              "subfields": []
+              "idAttribute": true
             }
           ],
           "type": "COMMAND",
@@ -62,11 +62,11 @@
           "fields": [
             {
               "name": "orderId",
-              "generated": true,
-              "idAttribute": true,
               "type": "UUID",
+              "generated": true,
+              "subfields": [],
               "cardinality": "Single",
-              "subfields": []
+              "idAttribute": true
             }
           ],
           "type": "EVENT",
@@ -107,11 +107,11 @@
           "fields": [
             {
               "name": "orderId",
-              "generated": true,
-              "idAttribute": true,
               "type": "UUID",
+              "generated": true,
+              "subfields": [],
               "cardinality": "Single",
-              "subfields": []
+              "idAttribute": true
             }
           ],
           "type": "SCREEN",
@@ -162,9 +162,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -207,9 +207,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -253,10 +253,10 @@
           "fields": [
             {
               "name": "orderId",
-              "idAttribute": true,
               "type": "UUID",
+              "subfields": [],
               "cardinality": "Single",
-              "subfields": []
+              "idAttribute": true
             }
           ],
           "type": "SCREEN",
@@ -309,9 +309,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -321,16 +321,16 @@
           "aggregateDependencies": [],
           "dependencies": [
             {
-              "id": "3458764652834972773",
-              "type": "OUTBOUND",
-              "title": "List of drinks to prepared",
-              "elementType": "SCREEN"
-            },
-            {
               "id": "3458764652835081738",
               "type": "OUTBOUND",
               "title": "processor",
               "elementType": "AUTOMATION"
+            },
+            {
+              "id": "3458764652834972773",
+              "type": "OUTBOUND",
+              "title": "List of drinks to prepared",
+              "elementType": "SCREEN"
             },
             {
               "id": "3458764652834726985",
@@ -362,9 +362,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -416,9 +416,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -461,9 +461,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -511,9 +511,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -582,27 +582,27 @@
           "aggregateDependencies": [],
           "dependencies": [
             {
-              "id": "3458764652835193675",
-              "type": "OUTBOUND",
-              "title": "Espresso to prepare",
-              "elementType": "SCREEN"
-            },
-            {
               "id": "3458764652835334856",
               "type": "OUTBOUND",
               "title": "espresso maker processor",
               "elementType": "AUTOMATION"
             },
             {
-              "id": "3458764652834727195",
-              "type": "INBOUND",
-              "title": "Frost Milk Prepared",
-              "elementType": "EVENT"
+              "id": "3458764652835193675",
+              "type": "OUTBOUND",
+              "title": "Espresso to prepare",
+              "elementType": "SCREEN"
             },
             {
               "id": "3458764652857087696",
               "type": "INBOUND",
               "title": "Espresso Ordered",
+              "elementType": "EVENT"
+            },
+            {
+              "id": "3458764652834727195",
+              "type": "INBOUND",
+              "title": "Frost Milk Prepared",
               "elementType": "EVENT"
             }
           ],
@@ -629,9 +629,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -683,9 +683,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -728,9 +728,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -742,7 +742,7 @@
             {
               "id": "3458764652835546482",
               "type": "OUTBOUND",
-              "title": "Espresso ready",
+              "title": "Ist of Espresso ready",
               "elementType": "READMODEL"
             },
             {
@@ -778,9 +778,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -819,7 +819,7 @@
       "id": "3458764652835750216",
       "status": "Created",
       "index": 13,
-      "title": "slice: Order ready",
+      "title": "slice: Espresso ready",
       "context": "eventZ Cappuccino",
       "sliceType": "STATE_VIEW",
       "commands": [],
@@ -831,15 +831,15 @@
           "elementContext": "INTERNAL",
           "modelContext": "eventZ Cappuccino",
           "context": "INTERNAL",
-          "slice": "slice: Order ready",
-          "title": "Espresso ready",
+          "slice": "slice: Espresso ready",
+          "title": "Ist of Espresso ready",
           "fields": [
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -899,9 +899,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -944,9 +944,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -994,9 +994,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -1014,7 +1014,7 @@
             {
               "id": "3458764652835546482",
               "type": "INBOUND",
-              "title": "Espresso ready",
+              "title": "Ist of Espresso ready",
               "elementType": "READMODEL"
             }
           ],
@@ -1053,9 +1053,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
@@ -1100,9 +1100,9 @@
             {
               "name": "orderId",
               "type": "UUID",
-              "cardinality": "Single",
-              "subfields": [],
               "generated": true,
+              "subfields": [],
+              "cardinality": "Single",
               "idAttribute": true
             }
           ],
